@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Samaksh Singh — Portfolio</title>
+
+    <!-- Pixel / modern fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --orange: #f4a259;
+            --orange-dark: #f18f01;
+            --cream: #f3f0e6;
+            --ink: #111111;
+            --ink-soft: #2b2b2b;
+            --accent: #ffdd57;
+
+            --bg: #050505;
+            --bg-soft: #141414;
+            --text-main: #fdfcf8;
+            --text-muted: #ded7c4;
+            --card-bg: #f3f0e6;
+            --card-bg-soft: #e3decd;
+            --outline: #000000;
+        }
+
+        [data-theme="light"] {
+            --bg: #f0ede5;
+            --bg-soft: #e3decd;
+            --text-main: #111111;
+            --text-muted: #555147;
+            --card-bg: #fdfaf3;
+            --card-bg-soft: #f3eedf;
+            --outline: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #222 0, #000 55%, #000 100%);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+        }
+
+        .frame {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--orange);
+            padding: 18px;
+            border-radius: 18px;
+            box-shadow:
+                0 0 0 3px #000,
+                0 18px 40px rgba(0, 0, 0, 0.65);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .frame::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle,
+                    rgba(255, 255, 255, 0.05) 1px,
+                    transparent 0);
+            background-size: 8px 8px;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+        .frame-inner {
+            position: relative;
+            background: var(--bg-soft);
+            border-radius: 8px;
+            padding: 22px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: auto auto;
+            grid-gap: 18px;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 16px;
+            }
+
+            .frame-inner {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow:
+                0 0 0 3px var(--outline),
+                4px 4px 0 0 var(--outline);
+            overflow: hidden;
+            transform: translateY(16px);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.6s ease-out;
+        }
+
+        .panel.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .panel-title-pixel {
+            font-family: "Press Start 2P", system-ui;
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            border: 2px solid var(--outline);
+            background: var(--orange-dark);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .chip-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.35);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 120px minmax(0, 1fr);
+            grid-gap: 14px;
+            align-items: center;
+        }
+
+        .avatar-wrap {
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 3px var(--outline),
+                0 0 0 6px var(--card-bg-soft);
+            background: #111;
+        }
+
+        .avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            image-rendering: pixelated;
+            filter: saturate(1.1) contrast(1.1);
+            transform: scale(1.02);
+        }
+
+        .hero-main h1 {
+            font-size: 24px;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+        }
+
+        .hero-main h2 {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+            font-size: 11px;
+        }
+
+        .hero-tags span {
+            border-radius: 999px;
+            border: 2px solid var(--outline);
+            padding: 3px 9px;
+            background: var(--card-bg-soft);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            border-radius: 4px;
+            border: 3px solid var(--outline);
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: var(--orange-dark);
+            cursor: pointer;
+            box-shadow: 3px 3px 0 0 var(--outline);
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out,
+                background 0.15s ease-out;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .btn.secondary {
+            background: var(--card-bg-soft);
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 0 var(--outline);
+            background: var(--orange);
+        }
+
+        .btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 0 var(--outline);
+        }
+
+        .nav-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            border: 2px solid var(--outline);
+            background: var(--card-bg-soft);
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .hamburger {
+            width: 14px;
+            height: 10px;
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+        }
+
+        .hamburger span {
+            background: var(--outline);
+            border-radius: 999px;
+        }
+
+        .nav-menu {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow:
+                0 0 0 3px var(--outline),
+                4px 4px 0 0 var(--outline);
+            padding: 10px 12px;
+            display: none;
+            z-index: 20;
+        }
+
+        .nav-menu.open {
+            display: block;
+            animation: pop-in 0.2s ease-out forwards;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .nav-menu li+li {
+            margin-top: 6px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: inherit;
+            padding: 3px 0;
+            display: block;
+        }
+
+        .nav-menu a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes pop-in {
+            from {
+                transform: scale(0.92) translateY(-6px);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .summary-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #4a4638;
+        }
+
+        .summary-bullets {
+            margin-top: 14px;
+            font-size: 12px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .summary-bullets span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bullet-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            background: var(--orange-dark);
+            box-shadow: 0 0 0 2px var(--outline);
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-auto-rows: 120px;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .work-card {
+            position: relative;
+            background: var(--card-bg-soft);
+            border-radius: 6px;
+            border: 2px solid var(--outline);
+            padding: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 0 var(--outline);
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+            font-size: 11px;
+        }
+
+        .work-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 0 var(--outline);
+        }
+
+        .work-card h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .work-card p {
+            font-size: 11px;
+            color: #5b5748;
+        }
+
+        .label {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 999px;
+            border: 1px solid var(--outline);
+            background: var(--orange);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 11px;
+        }
+
+        .stat {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 2px solid var(--outline);
+            background: var(--card-bg-soft);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .xp-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .xp-item h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .xp-meta {
+            font-size: 10px;
+            color: #6a6554;
+            margin-bottom: 3px;
+        }
+
+        .xp-item ul {
+            margin-left: 14px;
+            list-style: square;
+            color: #403c31;
+        }
+
+        .xp-item li+li {
+            margin-top: 2px;
+        }
+
+        .case-body {
+            font-size: 12px;
+            color: #4a4638;
+            line-height: 1.5;
+            display: grid;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .case-footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 30;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            border: 2px solid #000;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fefae0;
+            font-size: 11px;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+        }
+
+        [data-theme="light"] .theme-toggle {
+            background: rgba(255, 255, 255, 0.85);
+            color: #111;
+        }
+
+        .theme-toggle span.icon {
+            font-size: 13px;
+        }
+
+        .contact-line {
+            font-size: 11px;
+            color: #443f33;
+            margin-top: 8px;
+        }
+
+        .contact-line a {
+            color: inherit;
+        }
+
+        .inline-pill {
+            padding: 2px 6px;
+            border-radius: 999px;
+            border: 1px solid var(--outline);
+            background: var(--card-bg-soft);
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        a {
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Theme toggle -->
+    <button class="theme-toggle" id="themeToggle">
+        <span class="icon" id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark</span>
+    </button>
+
+    <main class="frame">
+        <div class="frame-inner">
+            <!-- Panel 1: Hero & nav -->
+            <section class="panel" id="hero">
+                <div class="panel-header">
+                    <div class="chip">
+                        <span class="chip-dot"></span>
+                        Available for internships
+                    </div>
+                    <button class="nav-chip" id="navToggle">
+                        <div class="hamburger">
+                            <span></span><span></span><span></span>
+                        </div>
+                        Menu
+                    </button>
+                    <nav class="nav-menu" id="navMenu">
+                        <ul>
+                            <li><a href="#hero">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#works">Work</a></li>
+                            <li><a href="#experience">Experience</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="hero">
+                    <div class="avatar-wrap">
+                        <!-- Put profile.jpg in same folder -->
+                        <img src="profile.jpg" alt="Portrait of Samaksh Singh">
+                    </div>
+                    <div class="hero-main">
+                        <h1>Samaksh Singh</h1>
+                        <h2>Business Development &amp; Marketing · B.E. CSE (Pre-final Year)</h2>
+
+                        <div class="hero-tags">
+                            <span>Brand Partnerships</span>
+                            <span>Hyperlocal Growth</span>
+                            <span>SQL &amp; Analytics</span>
+                        </div>
+
+                        <div class="hero-actions">
+                            <a class="btn" href="SamakshSinghResume.pdf" download>Download Resume</a>
+                            <a class="btn secondary" href="#works">View My Work</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-line" id="contact">
+                    <span class="inline-pill">Patiala, Punjab</span>
+                    &nbsp; · &nbsp;
+                    <a href="mailto:samakshsingh127@gmail.com">samakshsingh127@gmail.com</a>
+                    &nbsp; · &nbsp;
+                    <a href="https://linkedin.com/in/samaksh-singh" target="_blank" rel="noopener noreferrer">
+                        linkedin.com/in/samaksh-singh
+                    </a>
+                    &nbsp; · &nbsp;
+                    <span>+91-9599784920</span>
+                </div>
+            </section>
+
+            <!-- Panel 2: About / summary -->
+            <section class="panel" id="about">
+                <div class="panel-header">
+                    <div class="panel-title-pixel">About</div>
+                </div>
+                <p class="summary-text">
+                    Results-driven pre-final-year engineering student with hands-on experience in
+                    brand partnerships, sponsorship acquisition, and hyperlocal business
+                    collaboration. I enjoy sitting at the intersection of <strong>stakeholder
+                        management, data, and execution</strong> — turning messy marketing and ops
+                    problems into structured experiments.
+                </p>
+
+                <div class="summary-bullets">
+                    <span>
+                        <span class="bullet-dot"></span>
+                        Secured partnerships with national brands such as <strong>RedBull</strong> and
+                        <strong>Britannia</strong>.
+                    </span>
+                    <span>
+                        <span class="bullet-dot"></span>
+                        Blend of <strong>BD, marketing &amp; operations</strong> with a growing
+                        foundation in SQL and analytics.
+                    </span>
+                    <span>
+                        <span class="bullet-dot"></span>
+                        Comfortable working in early-stage, ambiguous environments and building
+                        repeatable processes from scratch.
+                    </span>
+                </div>
+
+                <div style="margin-top: 16px; font-size: 11px;">
+                    <span class="inline-pill">B.E. CSE · Thapar Institute</span>
+                    &nbsp;
+                    <span class="inline-pill">CGPA 7.3 / 10</span>
+                    &nbsp;
+                    <span class="inline-pill">Expected Grad: May 2027</span>
+                </div>
+            </section>
+
+            <!-- Panel 3: Works / projects / entrepreneurial -->
+            <section class="panel" id="works">
+                <div class="panel-header">
+                    <div class="panel-title-pixel">Works</div>
+                </div>
+
+                <div class="label">Selected work &amp; experiments</div>
+
+                <div class="works-grid">
+                    <!-- Project 1: Campus Snack Business -->
+                    <article class="work-card">
+                        <h4>Campus Snack Business</h4>
+                        <p>
+                            Hyperlocal, on-demand snack delivery for 50+ students with a WhatsApp-based
+                            ordering workflow and simple demand forecasting.
+                        </p>
+                        <div style="position:absolute;bottom:6px;right:8px;font-size:9px;">
+                            Ops · Pricing · CX
+                        </div>
+                    </article>
+
+                    <!-- Project 2: Home-made Bakery Stall -->
+                    <article class="work-card">
+                        <h4>Home-made Bakery Stall</h4>
+                        <p>
+                            Bootstrapped stall at a high-traffic fair, serving 200+ customers while
+                            iterating product mix from real-time feedback.
+                        </p>
+                        <div style="position:absolute;bottom:6px;right:8px;font-size:9px;">
+                            Experiment · Revenue
+                        </div>
+                    </article>
+
+                    <!-- Project 3: UniVerse App GTM -->
+                    <article class="work-card">
+                        <h4>UniVerse App GTM</h4>
+                        <p>
+                            Campus go-to-market: 0 → 1000+ active users in one month via digital +
+                            on-ground campaigns and 6 “Founding Partner” societies.
+                        </p>
+                        <div style="position:absolute;bottom:6px;right:8px;font-size:9px;">
+                            Growth · Partnerships
+                        </div>
+                    </article>
+
+                    <!-- Project 4: Event Monetisation @ BCS -->
+                    <article class="work-card">
+                        <h4>Synapse · F1 Simulator</h4>
+                        <p>
+                            Introduced a monetised F1 simulator attraction that drove footfall and
+                            ancillary revenue while strengthening RedBull partnership.
+                        </p>
+                        <div style="position:absolute;bottom:6px;right:8px;font-size:9px;">
+                            Sponsorship · GTM
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Panel 4: Experience + case study -->
+            <section class="panel" id="experience">
+                <div class="panel-header">
+                    <div class="panel-title-pixel">Experience</div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat">3+ concurrent roles</div>
+                    <div class="stat">Brand &amp; BD · Media · Startup</div>
+                    <div class="stat">Early-stage &amp; campus ops</div>
+                </div>
+
+                <div class="xp-list">
+                    <div class="xp-item">
+                        <h4>Business Development Intern · Cosmic Attire</h4>
+                        <div class="xp-meta">Dec 2025 – Present · Early-stage apparel startup</div>
+                        <ul>
+                            <li>Work directly with founders on early-stage growth and partnerships.</li>
+                            <li>Run structured market &amp; creator research in the streetwear niche.</li>
+                            <li>Draft outreach, manage simple CRM on Sheets/Notion, and report weekly BD insights.</li>
+                        </ul>
+                    </div>
+
+                    <div class="xp-item">
+                        <h4>Production Manager (Part-Time) · Swipe Hype Media</h4>
+                        <div class="xp-meta">Dec 2025 – Present · Media &amp; content production</div>
+                        <ul>
+                            <li>Oversee end-to-end production for reels, podcasts, commercials and cinematography.</li>
+                            <li>Coordinate shoots, on-set execution, and alignment with client brand tone.</li>
+                            <li>Manage raw-footage pipelines, editors and quality checks across 5–7 weekly deliverables.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="xp-item">
+                        <h4>Marketing Intern · NOT@MRP</h4>
+                        <div class="xp-meta">Nov 2025 – Present · Quick-commerce food platform</div>
+                        <ul>
+                            <li>Analyse campaign performance and audience insights to refine content strategy.</li>
+                            <li>Conduct competitor benchmarking for positioning, promos and engagement.</li>
+                            <li>Maintain marketing data on Sheets and surface insights for experiments.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="case-body" style="margin-top: 18px;">
+                    <strong>Leadership &amp; campus roles</strong>
+                    <div>
+                        <span class="inline-pill">Marketing Head · UniVerse App</span> — Led
+                        go-to-market, society partnerships and user community feedback loops.
+                    </div>
+                    <div>
+                        <span class="inline-pill">Joint General Secretary · FAPS</span> — Co-led two
+                        major college events (300+ attendees) and sponsorship acquisition.
+                    </div>
+                    <div>
+                        <span class="inline-pill">Marketing &amp; Social Media Head · BCS</span> —
+                        Negotiated RedBull partnership and used analytics to shape content.
+                    </div>
+                    <div>
+                        <span class="inline-pill">Management Member · Mudra Society</span> —
+                        Supported Britannia sponsorship, coordination and event operations.
+                    </div>
+                </div>
+
+                <div class="case-footer">
+                    <div>
+                        <strong>Skills &amp; tools</strong><br>
+                        Digital marketing fundamentals · AWS Cloud Essentials · SQL basics (joins, subqueries)
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Theme toggle with localStorage
+        const toggleBtn = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
+        const themeLabel = document.getElementById("themeLabel");
+
+        function setTheme(mode) {
+            document.documentElement.setAttribute("data-theme", mode);
+            localStorage.setItem("samaksh-theme", mode);
+            if (mode === "light") {
+                themeIcon.textContent = "☀️";
+                themeLabel.textContent = "Light";
+            } else {
+                themeIcon.textContent = "🌙";
+                themeLabel.textContent = "Dark";
+            }
+        }
+
+        const storedTheme = localStorage.getItem("samaksh-theme");
+        if (storedTheme === "light" || storedTheme === "dark") {
+            setTheme(storedTheme);
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", () => {
+                const current = document.documentElement.getAttribute("data-theme") || "dark";
+                setTheme(current === "dark" ? "light" : "dark");
+            });
+        }
+
+        // Navigation menu toggle
+        const navToggle = document.getElementById("navToggle");
+        const navMenu = document.getElementById("navMenu");
+
+        if (navToggle && navMenu) {
+            navToggle.addEventListener("click", () => {
+                navMenu.classList.toggle("open");
+            });
+
+            navMenu.addEventListener("click", (e) => {
+                if (e.target.tagName === "A") {
+                    navMenu.classList.remove("open");
+                }
+            });
+        }
+
+        // Scroll reveal for panels
+        const panels = document.querySelectorAll(".panel");
+        if ("IntersectionObserver" in window) {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("visible");
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: 0.2 }
+            );
+
+            panels.forEach((panel) => observer.observe(panel));
+        } else {
+            // Fallback if IntersectionObserver not supported
+            panels.forEach((panel) => panel.classList.add("visible"));
+        }
+    </script>
+</body>
+
+</html>
